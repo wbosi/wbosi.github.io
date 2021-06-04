@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .chessbox{
+            width: 570px;
+            height: 570px;
+            /* border: 1px solid black; */
+            position: relative;
+            background: burlywood;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chessbox"></div>
+
+    <script>
+        let chessbox = document.querySelector(".chessbox");
+        let boxw = 30;  
+        let boxh = 30;
+        let boxnum = chessbox.clientWidth*chessbox.clientHeight / boxw/boxh;
+        let boxcol = chessbox.clientWidth/boxw;
+        let flag = true;
+        for(let i=0;i<boxnum;i++)
+        {
+            let div = document.createElement("div");
+            Object.assign(div.style,{
+                width:boxw-2+"px",
+                height:boxh-2+"px",
+                border:"1px solid white",
+                left: i%boxcol*boxw + "px",
+                top:  parseInt(i/boxcol)*boxh+"px",
+                position:"absolute",
+            })
+            div.x=i%boxcol*boxw;
+            div.y= parseInt(i/boxcol)*boxh;
+            div.onclick=click;
+            div.black=0;
+            div.white=0;
+            chessbox.appendChild(div);
+        }
+        function click (eve)
+        {
+            //缺少单位检测 能在同一个地方下棋
+            let div = document.createElement("div");
+            if(flag)
+               {
+                Object.assign(div.style,{
+                    width: "28px",
+                    height: "28px",
+                    position: "absolute",
+                    background: "black",
+                    borderRadius: "50%",
+                   // left:eve.target.x+1+"px",
+                   // top:eve.target.y+1+"px",
+                   // zIndex:"10"
+                })
+                flag=!flag;
+                eve.target.black=1;
+               }
+            else
+           { Object.assign(div.style,{
+                    width: "28px",
+                    height: "28px",
+                    position: "absolute",
+                    background: "white",
+                    borderRadius: "50%",
+                    //left:eve.target.x+1+"px",
+                    //top:eve.target.y+1+"px",
+                    //zIndex:"10"
+                })
+            div.style.className = "whitechess";
+            flag=!flag;
+            eve.target.white=1;
+           }
+           eve.target.appendChild(div);
+           check();
+        }
+        function check(){
+          //  console.log(chessbox.children.length);
+            for(let i=0;i<boxcol;i++){  let bnum=0;
+          let wnum=0;
+               // console.log(chessbox.children[i].black,chessbox.children[i].white);
+               for(let j =0;j<boxcol;j++)
+               {
+                   if(chessbox.children[i*boxcol+j].black){
+                       bnum++;
+                       if(bnum==5)
+            {
+               alert("black win")
+                return;
+            }
+                      
+                   }else bnum=0;
+                   
+                   if(chessbox.children[i*boxcol+j].white)
+                   {
+                        wnum++;
+                        if(wnum==5){
+                            alert("white win");
+                            return;
+                        }
+                
+                   } else wnum=0;
+
+               }
+            }
+
+               for(let i=0;i<boxcol;i++){  let bnum=0;
+          let wnum=0;
+               for(let j =0;j<boxcol;j++)
+               {
+                   if(chessbox.children[i+j*boxcol].black){
+                       bnum++;
+                       if(bnum==5)
+            {
+               alert("black win")
+                return;
+            }
+                     
+                   }else bnum=0;
+                   
+                   if(chessbox.children[i+j*boxcol].white)
+                   {
+                        wnum++;
+                        if(wnum==5){
+                            alert("white win");
+                            return;
+                        }
+                   } else wnum=0;
+
+               }
+            }
+
+
+
+               //----------------------
+               for(let k=0;k<boxcol-4;k++)
+               {  let bnum=0;
+                    let wnum=0;
+               for(let i=0;i<boxcol-4;i++){
+               for(let j =0;j<5;j++)
+               {
+                 //  console.log(i+j*boxcol+j);
+                   if(chessbox.children[k*boxcol+i+j*boxcol+j].black){
+                            bnum++;
+                      // console.log((i+1)*boxcol);
+                      // console.log("bx",bnum,i+j*boxcol+j);
+                     
+                   }//else bnum=0;
+                   
+                   if(chessbox.children[k*boxcol+i+j*boxcol+j].white)
+                   {
+                        wnum++;
+                       // console.log("wv",wnum,i+j*boxcol+j);
+                      
+                   }// else wnum=0;
+
+               }
+            
+
+               if(bnum==5)
+                {
+                alert("black win")
+                    return;
+                }
+                else bnum=0;
+                    if(wnum==5){
+                        alert("white win");
+                        return;
+                    }
+                    else wnum=0;
+            }
+
+            }
+//----------------------------------------------------------
+
+
+            for(let k=0;k<boxcol-4;k++)
+               {let bnum=0;
+                let wnum=0;
+               for(let i=4;i<boxcol;i++){
+               for(let j =0;j<5;j++)
+               {
+                 
+                   if(chessbox.children[k*boxcol+j*boxcol+i-j].black){
+                            bnum++;
+                  
+                     
+                   }
+                   
+                   if(chessbox.children[k*boxcol+j*boxcol+i-j].white)
+                   {
+                        wnum++;
+                   
+                      
+                   }
+               }
+            
+
+               if(bnum==5)
+                {
+                alert("black win")
+                    return;
+                }
+                else bnum=0;
+                    if(wnum==5){
+                        alert("white win");
+                        return;
+                    }
+                    else wnum=0;
+            }
+
+            }
+        }
+
+
+        
+
+
+    </script>
+    
+</body>
+</html>
